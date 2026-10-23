@@ -1,5 +1,6 @@
 void AddNPCEnchanterScripts();
 
-void Addmod_npc_enchanterScripts() {
+void Addtw_mod_npc_enchanterScripts()
+{
     AddNPCEnchanterScripts();
 }
