@@ -1,46 +1,81 @@
-# ![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png) AzerothCore
-## Enchanter NPC
-- Latest build status with azerothcore: [![Build Status](https://github.com/azerothcore/mod-npc-enchanter/workflows/core-build/badge.svg?branch=master&event=push)](https://github.com/azerothcore/mod-npc-enchanter)
+# tw-mod-npc-enchanter
 
-_This module was created for [StygianCore](https://rebrand.ly/stygiancoreproject). A World of Warcraft 3.3.5a Solo/LAN repack by StygianTheBest | [GitHub](https://rebrand.ly/stygiangithub) | [Website](https://rebrand.ly/stygianthebest))_
-_Ported to AzerothCore by gtao725 (https://github.com/gtao725/)_
+Tortoise-WoW port of the AzerothCore `mod-npc-enchanter` module.
 
-### Data ###
+Provides an NPC, **Beauregard Boneglitter** (entry `601015`), who can apply
+Vanilla and Tortoise-specific enchantments to a player's equipped gear through gossip menus.
 
-- Type: NPC (ID: 601015)
-- Script: npc_enchantment
-- Config: Yes
-- SQL: No
+## Features
 
-### Version ###
+- Gossip-based enchant menu for all enchantable slots
+- Vanilla enchants (weapon, shield, chest, bracers, gloves, boots, cloak, ranged weapon)
+- Dire Maul libram arcanums and ZG class enchants for head/leg
+- Naxxramas guards and Scourge enchants for head/shoulder
+- Tortoise-WoW custom enchants for gloves, cloak, shoulders, belt, rings, and neck
+- Turtle-WoW belt buckles and gemstone ring/neck enchants
+- Ranged weapon scopes (Crude, Standard, Accurate, Deadly, Sniper, Biznicks 247x128 Accurascope, Facetted Crystal Scope)
+- Vampirism enchant for bracers, boots, rings, and neck
+- Profession-gated extras (configurable):
+  - Blacksmithing 300 unlocks weapon chains and shield spikes
+  - Engineering 300 unlocks Minor Mount Speed for boots
+- Configurable random NPC phrases and emotes
+- Login announcement
 
-- v2019.04.15 - Ported to AzerothCore by gtao725 (https://github.com/gtao725/)
-- v2019.02.21 - Add AI/Phrases/Emotes, Update Menu
-- v2018.12.05 - Fix broken menu. Replace 'Enchant Weapon' function. Add creature AI and creature text.
-- v2018.12.01 - Update function, Add icons, Fix typos, Add a little personality (Emotes don't always work)
-- v2017.08.08 - Release
+## Requirements
 
-### CREDITS
+- Tortoise-WoW core
+- Module enabled at CMake configure time
 
-![Styx](https://stygianthebest.github.io/assets/img/avatar/avatar-128.jpg "Styx")
-![StygianCore](https://stygianthebest.github.io/assets/img/projects/stygiancore/StygianCore.png "StygianCore")
+## Installation
 
-##### This module was created for [StygianCore](https://rebrand.ly/stygiancoreproject). A World of Warcraft 3.3.5a Solo/LAN repack by StygianTheBest | [GitHub](https://rebrand.ly/stygiangithub) | [Website](https://rebrand.ly/stygianthebest))
+1. Ensure the module lives at `modules/tw-mod-npc-enchanter/`.
+2. Configure the core with modules enabled, e.g.:
+   ```sh
+   cmake -S . -B build -DMODULES=static
+   ```
+3. Build the core.
+4. Copy the module config:
+   ```sh
+   cp modules/tw-mod-npc-enchanter/conf/tw-mod-npc-enchanter.conf.dist \
+      <runtime-config-dir>/modules/tw-mod-npc-enchanter.conf
+   ```
+5. Run the world SQL update:
+   ```sql
+   SOURCE modules/tw-mod-npc-enchanter/data/sql/world/npc_enchanter.sql
+   ```
+6. Build and restart the world server.
 
-#### Additional Credits
+## Spawning
 
-- [Blizzard Entertainment](http://blizzard.com)
-- [TrinityCore](https://github.com/TrinityCore/TrinityCore/blob/3.3.5/THANKS)
-- [SunwellCore](http://www.azerothcore.org/pages/sunwell.pl/)
-- [AzerothCore](https://github.com/AzerothCore/azerothcore-wotlk/graphs/contributors)
-- [OregonCore](https://wiki.oregon-core.net/)
-- [Wowhead.com](http://wowhead.com)
-- [OwnedCore](http://ownedcore.com/)
-- [ModCraft.io](http://modcraft.io/)
-- [MMO Society](https://www.mmo-society.com/)
-- [AoWoW](https://wotlk.evowow.com/)
-- [More credits are cited in the sources](https://github.com/StygianTheBest)
+In-game as a GM, stand on the ground where you want the NPC and run:
 
-### LICENSE
+```
+.npc add 601015
+```
 
-This code and content is released under the [GNU AGPL v3](https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3).
+Alternatively, add a permanent spawn to the `creature` table in the world database.
+
+## Configuration
+
+Edit `tw-mod-npc-enchanter.conf` under your module config directory.
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `Enchanter.Enable` | Enable the module | 1 |
+| `Enchanter.Announce` | Announce on player login | 1 |
+| `Enchanter.RequireBlacksmithing` | Require Blacksmithing 300 for weapon chains / shield spikes | 1 |
+| `Enchanter.RequireEngineering` | Require Engineering 300 for Minor Mount Speed boots | 1 |
+| `Enchanter.MessageTimer` | Emote phrase timer (ms, 60k–300k) | 60000 |
+| `Enchanter.NumPhrases` | Number of random phrases | 3 |
+| `Enchanter.EmoteSpell` | Spell ID cast during emote (0 = disabled) | 0 |
+| `Enchanter.EmoteCommand` | Emote ID performed during emote | 3 |
+| `EC.P1` … `EC.PN` | Random phrases | … |
+
+## Credits
+
+- Original module by StygianTheBest
+- Ported to AzerothCore by gtao725
+
+## License
+
+GNU AGPL v3
